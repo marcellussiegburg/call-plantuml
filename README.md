@@ -1,4 +1,4 @@
-# `call-plantuml`
+# `call-plantuml` [![Haskell CI](https://github.com/marcellussiegburg/call-plantuml/workflows/Haskell%20CI/badge.svg)]
 
 This is a simple library to call [PlantUML](https://plantuml.com) given a diagram specification.
 PlantUML is included (as JAR file) within this library.
