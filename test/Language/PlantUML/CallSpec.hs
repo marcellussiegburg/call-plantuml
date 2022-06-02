@@ -10,7 +10,7 @@ import Data.ByteString.Char8            (ByteString)
 import Language.PlantUML.Call           (DiagramType (..), drawPlantUMLDiagram)
 
 spec :: Spec
-spec = do
+spec =
   describe "existsInstance" $ do
     it "an empty specification cannot be drawn" $
       drawPlantUMLDiagram SVG "" `shouldThrow` anyIOException
