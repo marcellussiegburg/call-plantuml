@@ -41,6 +41,9 @@ import System.Process (
   createProcess, proc, waitForProcess,
   )
 
+{-|
+An output format for PlantUML.
+-}
 data DiagramType =
   ASCIIArt |
   ASCIIArtUnicode |
