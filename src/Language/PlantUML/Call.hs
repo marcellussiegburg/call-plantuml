@@ -34,8 +34,14 @@ import Data.ByteString.Char8            (unpack)
 import System.Exit                      (ExitCode (..))
 import System.FilePath
   ((</>), (<.>))
-import System.IO
-  (BufferMode (..), hClose, hFlush, hSetBuffering)
+import System.IO (
+  hClose,
+  hFlush,
+#ifndef mingw32_HOST_OS
+  BufferMode (NoBuffering),
+  hSetBuffering,
+#endif
+  )
 import System.Process (
   CreateProcess (..), StdStream (..),
   createProcess, proc, waitForProcess,
