@@ -82,7 +82,7 @@ jobs:
     - name: Build on windows
       shell: powershell
       run: |
-        stack --no-terminal --install-ghc ${env:ARGS} test --coverage --bench --no-run-benchmarks --haddock -no-haddock-deps --test-arguments="--maximum-generated-tests=50"
+        stack --no-terminal --install-ghc ${env:ARGS} test --coverage --bench --no-run-benchmarks --haddock --test-arguments="--maximum-generated-tests=50"
       env:
         ARGS: ${{ matrix.plan.resolver }}
       if: contains(matrix.os, 'windows')
