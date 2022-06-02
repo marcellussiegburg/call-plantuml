@@ -12,11 +12,11 @@ jobs:
   build:
     strategy:
       matrix:
-        os: [ubuntu-latest] #, windows-latest]
+        os: [ubuntu-latest , windows-latest]
         plan:
           - { resolver: "--resolver=lts-16.31" }
-        #  - { resolver: "--resolver=lts-18.28" }
-        #  - { resolver: "--resolver=lts-19.09" }
+          - { resolver: "--resolver=lts-18.28" }
+          - { resolver: "--resolver=lts-19.09" }
         include:
           - os: ubuntu-latest
             apt-get: java-common
