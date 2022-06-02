@@ -1,0 +1,57 @@
+name:                call-plantuml
+version:             0.0.1
+github:              "marcellussiegburg/call-plantuml"
+license:             MIT
+author:              "Marcellus Siegburg"
+maintainer:          "marcellus.siegburg@uni-due.de"
+copyright:           "2022 Marcellus Siegburg"
+
+data-dir: data
+data-files:
+  - COPYING
+  - plantuml.jar
+extra-source-files:
+  - README.md
+  - LICENSE
+  - ChangeLog.md
+ghc-options:
+  - -Wall
+  - -Wincomplete-uni-patterns
+  - -Wincomplete-record-updates
+  - -Widentities
+  - -Wredundant-constraints
+
+synopsis:            A simple library to call PlantUML given a diagram specification
+category:            Graphics, Language
+
+description:         Please see the README on GitHub at <https://github.com/marcellussiegburg/call-plantuml#readme>
+
+dependencies:
+- base                        >= 4.12 && < 5
+- bytestring                  >= 0.10.4 && < 0.12
+- filepath                    >= 1.4 && < 1.5
+- process                     >= 1.6 && < 1.7
+when:
+- condition: os(windows)
+  then:
+    cpp-options: -DWINDOWS
+  else:
+    dependencies: []
+
+library:
+  source-dirs: src
+  exposed-modules:
+    - Language.PlantUML.Call
+
+tests:
+  call-plantuml-test:
+    main:                Spec.hs
+    source-dirs:
+    - test
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - call-plantuml
+    - hspec
