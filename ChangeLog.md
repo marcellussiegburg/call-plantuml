@@ -2,11 +2,13 @@
 
 ## Unreleased changes
 
+## Released changes
+
+### Version 0.0.1.1
+
 - assure proper shutdown of Java (PlantUML)
 - make call truly headless
 - use async library
-
-## Released changes
 
 ### Version 0.0.1
 
