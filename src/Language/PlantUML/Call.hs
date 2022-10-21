@@ -12,6 +12,7 @@ This module provides the basic functionality to call PlantUML.
 -}
 module Language.PlantUML.Call (
   DiagramType (..),
+  drawPlantUmlDiagram,
   drawPlantUMLDiagram,
   ) where
 
@@ -28,6 +29,7 @@ import qualified Data.ByteString.Char8            as BS (
 import Control.Concurrent (
   forkIO, killThread, newEmptyMVar, putMVar, takeMVar,
   )
+import Control.Exception                (bracket)
 import Control.Monad                    (unless, when)
 import Data.ByteString                  (ByteString, hGetContents, hPutStr)
 import Data.ByteString.Char8            (unpack)
@@ -35,6 +37,7 @@ import System.Exit                      (ExitCode (..))
 import System.FilePath
   ((</>), (<.>))
 import System.IO (
+  Handle,
   hClose,
   hFlush,
 #ifndef mingw32_HOST_OS
@@ -43,8 +46,13 @@ import System.IO (
 #endif
   )
 import System.Process (
-  CreateProcess (..), StdStream (..),
-  createProcess, proc, waitForProcess,
+  CreateProcess (..),
+  ProcessHandle,
+  StdStream (..),
+  cleanupProcess,
+  createProcess,
+  proc,
+  waitForProcess,
   )
 
 {-|
@@ -73,28 +81,44 @@ typeShortName x = case x of
   VDX               -> "vdx"
 
 {-|
-This function may be used to draw a PlantUML diagram given a valid
-specification and a return type.
-It calls PlantUML via Java.
+Calls PlantUml (Java) using the given 'DiagramType'.
+Assures proper closing of the processes.
 -}
-drawPlantUMLDiagram
+callPlantUml
   :: DiagramType
-  -- ^ The return type of diagram to return
-  -> ByteString
-  -- ^ The PlantUML diagram specification which should be loaded
-  -> IO ByteString
-drawPlantUMLDiagram what content = do
+  -> ((Maybe Handle, Maybe Handle, Maybe Handle, ProcessHandle) -> IO a)
+  -> IO a
+callPlantUml what = flip bracket cleanupProcess $ do
   dataDir <- getDataDir
   let callPlantUML = proc "java" [
         "-jar", dataDir </> "plantuml" <.> "jar",
         "-p", "-t" ++ typeShortName what, "-nometadata", "-noerror"
         ]
-  (Just hin, Just hout, Just herr, ph) <-
-    createProcess callPlantUML {
-        std_out = CreatePipe,
-        std_in  = CreatePipe,
-        std_err = CreatePipe
-      }
+  createProcess callPlantUML {
+    std_out = CreatePipe,
+    std_in  = CreatePipe,
+    std_err = CreatePipe
+    }
+
+{-|
+A synonym for 'drawPlantUmlDiagram'.
+-}
+drawPlantUMLDiagram :: DiagramType -> ByteString -> IO ByteString
+drawPlantUMLDiagram = drawPlantUmlDiagram
+
+{-|
+This function may be used to draw a PlantUML diagram given a valid
+specification and a return type.
+It calls PlantUML via Java.
+-}
+drawPlantUmlDiagram
+  :: DiagramType
+  -- ^ The return type of diagram to return
+  -> ByteString
+  -- ^ The PlantUML diagram specification which should be loaded
+  -> IO ByteString
+drawPlantUmlDiagram what content = callPlantUml what $ \p -> do
+  (Just hin, Just hout, Just herr, ph) <- return p
   pout <- listenForOutput hout
   perr <- listenForOutput herr
 #ifndef mingw32_HOST_OS
