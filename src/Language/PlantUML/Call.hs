@@ -91,6 +91,7 @@ callPlantUml
 callPlantUml what = flip bracket cleanupProcess $ do
   dataDir <- getDataDir
   let callPlantUML = proc "java" [
+        "-Djava.awt.headless=true",
         "-jar", dataDir </> "plantuml" <.> "jar",
         "-p", "-t" ++ typeShortName what, "-nometadata", "-noerror"
         ]

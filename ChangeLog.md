@@ -3,6 +3,7 @@
 ## Unreleased changes
 
 - assure proper shutdown of Java (PlantUML)
+- make call truly headless
 
 ## Released changes
 
