@@ -26,9 +26,7 @@ import qualified Data.ByteString.Char8            as BS (
   tail,
   )
 
-import Control.Concurrent (
-  forkIO, killThread, newEmptyMVar, putMVar, takeMVar,
-  )
+import Control.Concurrent.Async         (concurrently)
 import Control.Exception                (bracket)
 import Control.Monad                    (unless, when)
 import Data.ByteString                  (ByteString, hGetContents, hPutStr)
@@ -120,32 +118,25 @@ drawPlantUmlDiagram
   -> IO ByteString
 drawPlantUmlDiagram what content = callPlantUml what $ \p -> do
   (Just hin, Just hout, Just herr, ph) <- return p
-  pout <- listenForOutput hout
-  perr <- listenForOutput herr
 #ifndef mingw32_HOST_OS
   hSetBuffering hin NoBuffering
 #endif
-  hPutStr hin content
-  hFlush hin
-  hClose hin
-  out <- getOutput pout
-  err <- getOutput perr
+  let evaluatePlantUml = do
+        hPutStr hin content
+        hFlush hin
+        hClose hin
+        waitForProcess ph
+  (out, err) <- fst <$> concurrently
+    (concurrently (hGetContents hout) (hGetContents herr))
+    evaluatePlantUml
   printContentOnError ph out
   unless (BS.null err) $ fail $ unpack err
   return out
   where
     printContentOnError ph out = do
       code <- waitForProcess ph
-      when (code == ExitFailure 1 || isError out)
+      when (code /= ExitSuccess || isError out)
         $ BS.putStrLn $ "Error on calling PlantUML with:\n" <> content
-    listenForOutput h = do
-      mvar <- newEmptyMVar
-      pid <- forkIO $ hGetContents h >>= putMVar mvar
-      return (pid, mvar)
-    getOutput (pid, mvar) = do
-      output <- takeMVar mvar
-      killThread pid
-      return output
 
 isError :: ByteString -> Bool
 isError xs =

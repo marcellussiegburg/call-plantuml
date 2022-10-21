@@ -4,6 +4,7 @@
 
 - assure proper shutdown of Java (PlantUML)
 - make call truly headless
+- use async library
 
 ## Released changes
 
