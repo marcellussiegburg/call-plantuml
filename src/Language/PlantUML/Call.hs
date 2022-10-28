@@ -125,7 +125,6 @@ drawPlantUmlDiagram what content = callPlantUml what $ \p -> do
         hPutStr hin content
         hFlush hin
         hClose hin
-        waitForProcess ph
   (out, err) <- fst <$> concurrently
     (concurrently (hGetContents hout) (hGetContents herr))
     evaluatePlantUml
