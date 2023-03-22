@@ -2,6 +2,8 @@
 
 ## Unreleased changes
 
+- assure process is not terminated too early
+
 ## Released changes
 
 ### Version 0.0.1.1
