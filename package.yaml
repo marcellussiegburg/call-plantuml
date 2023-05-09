@@ -1,10 +1,10 @@
 name:                call-plantuml
-version:             0.0.1.1
+version:             0.0.1.2
 github:              "marcellussiegburg/call-plantuml"
 license:             MIT
 author:              "Marcellus Siegburg"
 maintainer:          "marcellus.siegburg@uni-due.de"
-copyright:           "2022 Marcellus Siegburg"
+copyright:           "2022-2023 Marcellus Siegburg"
 
 data-dir: data
 data-files:

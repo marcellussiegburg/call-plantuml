@@ -1,11 +1,11 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.35.0.
+-- This file has been generated from package.yaml by hpack version 0.35.1.
 --
 -- see: https://github.com/sol/hpack
 
 name:           call-plantuml
-version:        0.0.1.1
+version:        0.0.1.2
 synopsis:       A simple library to call PlantUML given a diagram specification
 description:    Please see the README on GitHub at <https://github.com/marcellussiegburg/call-plantuml#readme>
 category:       Graphics, Language
@@ -13,7 +13,7 @@ homepage:       https://github.com/marcellussiegburg/call-plantuml#readme
 bug-reports:    https://github.com/marcellussiegburg/call-plantuml/issues
 author:         Marcellus Siegburg
 maintainer:     marcellus.siegburg@uni-due.de
-copyright:      2022 Marcellus Siegburg
+copyright:      2022-2023 Marcellus Siegburg
 license:        MIT
 license-file:   LICENSE
 build-type:     Simple
