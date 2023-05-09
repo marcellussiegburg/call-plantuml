@@ -3,6 +3,7 @@
 ## Unreleased changes
 
 - assure process is not terminated too early
+- upgrade PlantUML to 2023.06
 
 ## Released changes
 
